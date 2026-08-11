@@ -20,6 +20,8 @@ import Android
 import Darwin
 #elseif os(Windows)
 import ucrt
+#elseif os(WASI)
+import WASILibc
 #endif
 
 /// `StatementAuthorizer` provides information about compiled database

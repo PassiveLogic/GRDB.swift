@@ -59,6 +59,17 @@ let package = Package(
         .library(name: "GRDB", targets: ["GRDB"]),
         .library(name: "GRDB-dynamic", type: .dynamic, targets: ["GRDB"]),
     ],
+    traits: [
+        .default(enabledTraits: ["SystemSQLite"]),
+        .trait(
+            name: "SystemSQLite",
+            description: """
+                Link GRDB against the SQLite library of the target operating system.
+
+                Enabled by default. Disable it when your package graph provides \
+                SQLite. See Documentation/CustomSQLiteBuilds.md.
+                """),
+    ],
     dependencies: dependencies,
     targets: [
         // GRDB+SQLCipher: Delete the GRDBSQLite target
@@ -84,6 +95,12 @@ let package = Package(
             cSettings: cSettings,
             swiftSettings: swiftSettings + [
                 .enableUpcomingFeature("MemberImportVisibility"),
+            ],
+            linkerSettings: [
+                // The GRDBSQLite module map does not link SQLite, so that a
+                // package graph can provide its own. See the SystemSQLite trait
+                // and Documentation/CustomSQLiteBuilds.md.
+                .linkedLibrary("sqlite3", .when(traits: ["SystemSQLite"])),
             ]),
         .testTarget(
             name: "GRDBTests",

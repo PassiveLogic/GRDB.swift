@@ -143,6 +143,16 @@ GRDB adheres to [Semantic Versioning](https://semver.org/), with one exception: 
 
 ---
 
+## Unreleased
+
+- **New**: The `SystemSQLite` package trait lets an SPM package provide its own SQLite by [@krodak](https://github.com/krodak) in [#XXXX](https://github.com/groue/GRDB.swift/pull/XXXX)
+
+    The trait is enabled by default: GRDB still links against the SQLite library of the target operating system. See [Custom SQLite builds](Documentation/CustomSQLiteBuilds.md).
+
+- **New**: WASI branches in the platform conditionals by [@krodak](https://github.com/krodak) in [#XXXX](https://github.com/groue/GRDB.swift/pull/XXXX)
+
+    This does not make GRDB build for WASI: the WASI SDK ships no `Dispatch` module.
+
 ## 7.11.1
 
 Released June 18, 2026

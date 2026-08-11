@@ -355,6 +355,8 @@ The [Swift Package Manager](https://swift.org/package-manager/) automates the di
 
 GRDB offers two libraries, `GRDB` and `GRDB-dynamic`. Pick only one. When in doubt, prefer `GRDB`. The `GRDB-dynamic` library can reveal useful if you are going to link it with multiple targets within your app and only wish to link to a shared, dynamic framework once. See [How to link a Swift Package as dynamic](https://forums.swift.org/t/how-to-link-a-swift-package-as-dynamic/32062) for more information.
 
+GRDB links against the SQLite library of the target operating system, through the `SystemSQLite` package trait, enabled by default. If your package graph provides SQLite, disable this trait: see [Custom SQLite builds](Documentation/CustomSQLiteBuilds.md).
+
 > **Note**: Linux support is provided by contributors. It is not automatically tested, and not officially maintained. If you notice a build or runtime failure on Linux, please open a pull request with the necessary fix, thank you!
 
 

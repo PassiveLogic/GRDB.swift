@@ -110,9 +110,13 @@ public struct ImmediateValueObservationScheduler: ValueObservationMainActorSched
     public init() { }
     
     public func immediateInitialValue() -> Bool {
+        // Foundation for WASI does not provide `Thread`. WASI programs
+        // run on a single thread anyway.
+        #if !os(WASI)
         GRDBPrecondition(
             Thread.isMainThread,
             "ValueObservation must be started from the main thread.")
+        #endif
         return true
     }
     
