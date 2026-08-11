@@ -1,3 +1,4 @@
+import Dispatch
 import Foundation
 
 /// A class that serializes accesses to an SQLite connection.
