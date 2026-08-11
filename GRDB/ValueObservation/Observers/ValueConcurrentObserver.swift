@@ -1,3 +1,4 @@
+import Dispatch
 import Foundation
 
 /// `ValueConcurrentObserver` observes the database for `ValueObservation`, in

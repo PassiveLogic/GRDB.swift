@@ -1,3 +1,4 @@
+import Dispatch
 import Foundation
 
 /// The extent of the shared subscription to a ``SharedValueObservation``.
