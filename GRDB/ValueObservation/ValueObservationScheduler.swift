@@ -110,9 +110,11 @@ public struct ImmediateValueObservationScheduler: ValueObservationMainActorSched
     public init() { }
     
     public func immediateInitialValue() -> Bool {
+        #if !os(WASI)
         GRDBPrecondition(
             Thread.isMainThread,
             "ValueObservation must be started from the main thread.")
+        #endif
         return true
     }
     
