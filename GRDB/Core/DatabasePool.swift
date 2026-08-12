@@ -13,8 +13,10 @@ public final class DatabasePool {
     
     let databaseSnapshotCountMutex = Mutex(0)
     
+    #if !os(WASI)
     /// If Database Suspension is enabled, this array contains the necessary `NotificationCenter` observers.
     private var suspensionObservers: [NSObjectProtocol] = []
+    #endif
     
     // MARK: - Database Information
     
@@ -95,6 +97,7 @@ public final class DatabasePool {
     }
     
     deinit {
+        #if !os(WASI)
         // Remove block-based Notification observers.
         suspensionObservers.forEach(NotificationCenter.default.removeObserver(_:))
         
@@ -103,6 +106,7 @@ public final class DatabasePool {
         // https://developer.apple.com/library/mac/releasenotes/Foundation/RN-Foundation/index.html#10_11Error
         // Explicit unregistration is required before macOS 10.11.
         NotificationCenter.default.removeObserver(self)
+        #endif
         
         // Close reader connections before the writer connection.
         // Context: https://github.com/groue/GRDB.swift/issues/739
@@ -316,6 +320,7 @@ extension DatabasePool: DatabaseReader {
     }
     
     private func setupSuspension() {
+        #if !os(WASI)
         if configuration.observesSuspensionNotifications {
             let center = NotificationCenter.default
             suspensionObservers.append(center.addObserver(
@@ -331,6 +336,7 @@ extension DatabasePool: DatabaseReader {
                 using: { [weak self] _ in self?.resume() }
             ))
         }
+        #endif
     }
     
     // MARK: - Reading from Database

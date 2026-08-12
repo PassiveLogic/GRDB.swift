@@ -7,8 +7,10 @@ import UIKit
 public final class DatabaseQueue {
     private let writer: SerializedDatabase
     
+    #if !os(WASI)
     /// If Database Suspension is enabled, this array contains the necessary `NotificationCenter` observers.
     private var suspensionObservers: [NSObjectProtocol] = []
+    #endif
     
     // MARK: - Configuration
     
@@ -112,6 +114,7 @@ public final class DatabaseQueue {
     }
     
     deinit {
+        #if !os(WASI)
         // Remove block-based Notification observers.
         suspensionObservers.forEach(NotificationCenter.default.removeObserver(_:))
         
@@ -120,6 +123,7 @@ public final class DatabaseQueue {
         // https://developer.apple.com/library/mac/releasenotes/Foundation/RN-Foundation/index.html#10_11Error
         // Explicit unregistration is required before macOS 10.11.
         NotificationCenter.default.removeObserver(self)
+        #endif
     }
 }
 
@@ -205,6 +209,7 @@ extension DatabaseQueue: DatabaseReader {
     }
     
     private func setupSuspension() {
+        #if !os(WASI)
         if configuration.observesSuspensionNotifications {
             let center = NotificationCenter.default
             suspensionObservers.append(center.addObserver(
@@ -220,6 +225,7 @@ extension DatabaseQueue: DatabaseReader {
                 using: { [weak self] _ in self?.resume() }
             ))
         }
+        #endif
     }
     
     // MARK: - Reading from Database
